@@ -1,4 +1,5 @@
 const email = document.querySelector('#email');
+const emailExtra = document.querySelector('#emailExtra');
 const asunto = document.querySelector('#asunto');
 const mensaje = document.querySelector('#mensaje');
 const enviar = document.querySelector('button[type="submit"]');
@@ -10,7 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
     asunto.addEventListener('input', validarFormulario);
     mensaje.addEventListener('input', validarFormulario);
     formulario.addEventListener('submit', enviarEmail);
+    emailExtra.addEventListener('input', () => {
+        eliminarError(emailExtra.parentElement);
+        let valido = validarEmail(emailExtra);
+        if(email.value.trim() !== '' && asunto.value.trim() !== '' && mensaje.value.trim() !== '' && emailExtra.value.trim() !== '' && valido){
+            enviar.classList.remove('opacity-50');
+            enviar.disabled = false;
+        }
+}   );
 });
+
+function validarEmail(email){
+    if(email.value.trim() !== ''){
+        const er = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
+        if(!er.test(email.value)){
+            mensajeError(`El ${email.id} no es valido`, email.parentElement);
+            enviar.classList.add('opacity-50');
+            enviar.disabled = true;
+            console.log(email.parentElement);
+            return false;
+        }
+        return true;
+    }
+}
 
 function validarFormulario(e){
     
@@ -21,12 +44,9 @@ function validarFormulario(e){
         return;
     }
 
-    if(e.target.value.trim() !== '' && e.target.id === 'email'){
-        const er = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
-        if(!er.test(e.target.value)){
-            mensajeError(`El ${e.target.id} no es valido`, e.target.parentElement);
-            enviar.classList.add('opacity-50');
-            enviar.disabled = true;
+    if(e.target.id === "email"){
+        const valido = validarEmail(e.target);
+        if(!valido){
             return;
         }
     }
