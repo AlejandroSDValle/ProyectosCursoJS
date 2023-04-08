@@ -28,7 +28,6 @@ function validarEmail(email){
             mensajeError(`El ${email.id} no es valido`, email.parentElement);
             enviar.classList.add('opacity-50');
             enviar.disabled = true;
-            console.log(email.parentElement);
             return false;
         }
         return true;
